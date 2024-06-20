@@ -1,95 +1,143 @@
- <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Alec's Project</title>
-      <style>
-          body {
-              font-family: Arial, sans-serif;
-              margin: 20px;
-          }
-          header {
-              text-align: center;
-              margin-bottom: 40px;
-          }
-          h1 {
-              font-size: 2.5em;
-              margin-bottom: 0;
-          }
-          h2 {
-              font-size: 1.5em;
-              margin-top: 0;
-          }
-          section {
-              margin-bottom: 20px;
-          }
-          table {
-              width: 100%;
-              border-collapse: collapse;
-          }
-          th, td {
-              border: 1px solid #ddd;
-              padding: 8px;
-          }
-          th {
-              background-color: #f4f4f4;
-          }
-          a {
-              color: #0066cc;
-              text-decoration: none;
-          }
-          a:hover {
-              text-decoration: underline;
-          }
-      </style>
-  </head>
-  <body>
-  
-  <header>
-      <h1>Alec's Project</h1>
-      <h2>Alec Quillen</h2>
-      <p>This is a single-page application (SPA) style web application to search and display details of books. The data and service are provided by Google Books.</p>
-  </header>
-  
-  <section>
-      <h2>Course Information</h2>
-      <p>For more information about the course, please visit <a href="http://ccse.kennesaw.edu/it" target="_blank">Kennesaw State University IT Department</a>.</p>
-  </section>
-  
-  <section>
-      <h2>Project Information</h2>
-      <h3>Table of Contents</h3>
-      <table>
-          <thead>
-              <tr>
-                  <th>Milestone</th>
-                  <th>Description</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><a href="milestone1.html">Milestone 1</a></td>
-                  <td>Design web pages to display book data coded in the JSON format</td>
-              </tr>
-              <tr>
-                  <td><a href="milestone2.html">Milestone 2</a></td>
-                  <td>Search and get book information from the Google Books web API</td>
-              </tr>
-              <tr>
-                  <td><a href="milestone3.html">Milestone 3</a></td>
-                  <td>Complete major operations in the AJAX/AJAJ way</td>
-              </tr>
-              <tr>
-                  <td><a href="milestone4.html">Milestone 4</a></td>
-                  <td>Complete major operations in the AJAX/AJAJ way</td>
-              </tr>
-          </tbody>
-      </table>
-  </section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alec's Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #bookDetails {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Alec's Project</h1>
+    <h2>Alec Quillen</h2>
+    
+    <p>This is a single-page application (SPA) style web application to search and display details of books. The data and service are provided by Google Books.</p>
+    
+    <h3>Course Information</h3>
+    <p>For more information about the course, visit <a href="http://ccse.kennesaw.edu/it" target="_blank">CCSE IT Department</a>.</p>
+    
+    <h3>Project Milestones</h3>
+    <table>
+        <tr>
+            <th>Milestone</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><a href="#milestone1">Milestone 1</a></td>
+            <td>Project Setup and Basic Structure</td>
+        </tr>
+        <tr>
+            <td><a href="#milestone2">Milestone 2</a></td>
+            <td>Implement Book Search Functionality</td>
+        </tr>
+        <tr>
+            <td><a href="#milestone3">Milestone 3</a></td>
+            <td>Display Book Details</td>
+        </tr>
+        <tr>
+            <td><a href="#milestone4">Milestone 4</a></td>
+            <td>Finalize and Polish Application</td>
+        </tr>
+    </table>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="books.js"></script>
-  
-  </body>
-  </html>
+    <h3>Book Search</h3>
+    <input type="text" id="searchInput" placeholder="Enter book title">
+    <button onclick="searchBooks()">Search</button>
+
+    <div id="searchResults"></div>
+    <div id="bookDetails"></div>
+
+    <script>
+        const googleBooksSearch = {
+            "kind": "books#volumes",
+            "totalItems": 2000,
+            "items": [
+                {
+                    "kind": "books#volume",
+                    "id": "Wfan6L9RGgYC",
+                    "volumeInfo": {
+                        "title": "The Modern Web",
+                        "authors": ["Peter Gasston"],
+                        "publishedDate": "2013"
+                    }
+                }
+                // ... more items
+            ]
+        };
+
+        const googleBooksBook = {
+            "kind": "books#volume",
+            "id": "Wfan6L9RGgYC",
+            "volumeInfo": {
+                "title": "The Modern Web",
+                "subtitle": "Multi-device Web Development with HTML5, CSS3, and JavaScript",
+                "authors": ["Peter Gasston"],
+                "publisher": "No Starch Press",
+                "publishedDate": "2013",
+                "description": "A Guide to Modern Web Development...",
+                "pageCount": 264
+            }
+        };
+
+        function searchBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const results = googleBooksSearch.items.filter(book => 
+                book.volumeInfo.title.toLowerCase().includes(searchTerm)
+            );
+            displaySearchResults(results);
+        }
+
+        function displaySearchResults(results) {
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '';
+            results.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.innerHTML = `
+                    <h4>${book.volumeInfo.title}</h4>
+                    <p>By: ${book.volumeInfo.authors.join(', ')}</p>
+                    <button onclick="displayBookDetails('${book.id}')">View Details</button>
+                `;
+                resultsDiv.appendChild(bookDiv);
+            });
+        }
+
+        function displayBookDetails(bookId) {
+            const book = googleBooksBook;
+            const detailsDiv = document.getElementById('bookDetails');
+            detailsDiv.innerHTML = `
+                <h3>${book.volumeInfo.title}</h3>
+                <h4>${book.volumeInfo.subtitle}</h4>
+                <p>By: ${book.volumeInfo.authors.join(', ')}</p>
+                <p>Publisher: ${book.volumeInfo.publisher}</p>
+                <p>Published Date: ${book.volumeInfo.publishedDate}</p>
+                <p>Page Count: ${book.volumeInfo.pageCount}</p>
+                <p>${book.volumeInfo.description}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
