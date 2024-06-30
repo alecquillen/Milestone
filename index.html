@@ -3,19 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alec's Project</title>
+    <title>Alec's Project - Home</title>
     <link rel="stylesheet" href="styles.css">
     <script src="books.js" defer></script>
 </head>
 <body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="bookshelf.html">My Bookshelf</a></li>
+        </ul>
+    </nav>
+    
     <h1>Alec's Project</h1>
     <h2>Alec Quillen</h2>
-
+    
     <p>This is a single-page application (SPA) style web application to search and display details of books. The data and service are provided by Google Books.</p>
-
+    
     <h3>Course Information</h3>
     <p>This course covers advanced topics on web and mobile applications with a focus on modern web application architectures and mobile friendly user interfaces. Students will complete one major development project using the latest web technologies. <a href="http://ccse.kennesaw.edu/it" target="_blank">CCSE IT Department</a>.</p>
-
+    
     <h3>Project Milestones</h3>
     <table>
         <tr>
@@ -40,28 +47,10 @@
         </tr>
     </table>
 
-    <nav>
-        <ul>
-            <li><a href="#" id="home-menu">Home</a></li>
-            <li><a href="#" id="bookshelf-menu">My Bookshelf</a></li>
-        </ul>
-    </nav>
+    <h3>Book Search</h3>
+    <input type="text" id="searchInput" placeholder="Enter book title">
+    <button id="search-button">Search</button>
 
-    <main>
-        <section id="home-section">
-            <h3>Book Search</h3>
-            <input type="text" id="searchInput" placeholder="Enter book title">
-            <button id="search-button">Search</button>
-            <div id="searchResults"></div>
-        </section>
-        <section id="book-details-container" style="display: none;">
-            <h2>Book Details</h2>
-            <div id="bookDetails"></div>
-        </section>
-        <section id="bookshelf-section" style="display: none;">
-            <h2>My Bookshelf</h2>
-            <div id="bookshelf-container"></div>
-        </section>
-    </main>
+    <div id="searchResults"></div>
 </body>
 </html>
