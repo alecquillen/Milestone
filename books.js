@@ -1,6 +1,6 @@
 // books.js - Updated Functions
 
-const API_KEY = 'your_api_key_here'; // Replace with your actual API key
+const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I'; 
 const RESULTS_PER_PAGE = 10;
 
 // Home/Book Search Page
@@ -61,8 +61,8 @@ function fetchPage(page, searchTerm) {
 
 // My Bookshelf Page
 function loadBookshelf() {
-    const bookshelfId = 'your_bookshelf_id_here'; // Replace with your actual bookshelf ID
-    const url = `https://www.googleapis.com/books/v1/users/YOUR_USER_ID/bookshelves/${bookshelfId}/volumes?key=${API_KEY}`;
+    const bookshelfId = '1001'; 
+    const url = `https://www.googleapis.com/books/v1/users/117729639710872190748/bookshelves/${bookshelfId}/volumes?key=${API_KEY}`;
 
     fetch(url)
         .then(response => response.json())
