@@ -1,6 +1,9 @@
 const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I';
 const RESULTS_PER_PAGE = 10;
-const bookshelf = [];  // Local bookshelf array to hold book IDs
+const BOOKSHELF_KEY = 'bookshelf';
+
+// Initialize bookshelf from localStorage or create an empty array
+let bookshelf = JSON.parse(localStorage.getItem(BOOKSHELF_KEY)) || [];
 
 // Home/Book Search Page
 function searchBooks() {
@@ -62,6 +65,7 @@ function fetchPage(page, searchTerm) {
 function addToBookshelf(bookId) {
     if (!bookshelf.includes(bookId)) {
         bookshelf.push(bookId);
+        localStorage.setItem(BOOKSHELF_KEY, JSON.stringify(bookshelf)); // Save to localStorage
         alert('Book added to bookshelf');
     } else {
         alert('Book already in bookshelf');
@@ -82,7 +86,7 @@ function loadBookshelf() {
                 const volumeInfo = data.volumeInfo;
                 const bookHtml = `
                     <div class="book">
-                        <h4><a href="book-details.html?id=${book.id}" class="book-link">${volumeInfo.title}</a></h4>
+                        <h4><a href="book-details.html?id=${data.id}" class="book-link">${volumeInfo.title}</a></h4>
                         <p>By: ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
                         <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
                     </div>
