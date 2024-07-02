@@ -8,62 +8,48 @@
 </head>
 <body>
     <header>
-        <h1>The Individual Project</h1>
-        <h2>By Alec Quillen</h2>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="my-bookshelf.html">My Bookshelf</a></li>
+                <li><a href="bookshelf.html">Bookshelf</a></li>
             </ul>
         </nav>
     </header>
-
     <main>
-        <section id="bookshelf">
-            <!-- Bookshelf books will be displayed here -->
+        <h1>Alec's Project</h1>
+        <h2>Alec Quillen</h2>
+        
+        <section>
+            <h3>Course Information</h3>
+            <p>This course covers advanced topics on web and mobile applications with a focus on modern web application architectures and mobile friendly user interfaces. Students will complete one major development project using the latest web technologies. <a href="http://ccse.kennesaw.edu/it" target="_blank">CCSE IT Department</a>.</p>
         </section>
+        
+        <section>
+            <h3>Project Milestones</h3>
+            <table>
+                <tr>
+                    <th>Milestone</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><a href="#milestone1">Milestone 1</a></td>
+                    <td>Design web pages to display book data coded in the JSON format</td>
+                </tr>
+                <tr>
+                    <td><a href="#milestone2">Milestone 2</a></td>
+                    <td>Search and get book information from the Google Books web API</td>
+                </tr>
+                <tr>
+                    <td><a href="#milestone3">Milestone 3</a></td>
+                    <td>Complete major operations in the AJAX/AJAJ way</td>
+                </tr>
+                <tr>
+                    <td><a href="#milestone4">Milestone 4</a></td>
+                    <td>Improve the page design with better SPA UI designs</td>
+                </tr>
+            </table>
+        </section>
+        
     </main>
-
-    <footer>
-        <p>&copy; 2024 Alec Quillen. All rights reserved.</p>
-    </footer>
-
-    <script>
-        const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I'; // Replace with your actual API key
-        const USER_ID = '117729639710872190748'; // Replace with your actual user ID
-        const BOOKSHELF_ID = '1001'; // Replace with your actual public bookshelf ID
-
-        async function fetchPublicBookshelf() {
-            const url = `https://www.googleapis.com/books/v1/users/${USER_ID}/bookshelves/${BOOKSHELF_ID}/volumes?key=${API_KEY}`;
-            
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                displayPublicBookshelf(data.items);
-            } catch (error) {
-                console.error('Error fetching public bookshelf:', error);
-            }
-        }
-
-        function displayPublicBookshelf(books) {
-            const bookshelfDiv = document.getElementById('bookshelf');
-            bookshelfDiv.innerHTML = '';
-
-            books.forEach(book => {
-                const bookDiv = document.createElement('div');
-                bookDiv.classList.add('book-item');
-                bookDiv.innerHTML = `
-                    <h4>${book.volumeInfo.title}</h4>
-                    <img src="${book.volumeInfo.imageLinks?.thumbnail}" alt="${book.volumeInfo.title}">
-                    <p>By: ${book.volumeInfo.authors.join(', ')}</p>
-                    <a href="book-details.html?id=${book.id}">View Details</a>
-                `;
-                bookshelfDiv.appendChild(bookDiv);
-            });
-        }
-
-        // Call the function when the page loads
-        fetchPublicBookshelf();
-    </script>
 </body>
 </html>

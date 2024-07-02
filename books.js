@@ -1,4 +1,6 @@
-const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I';
+// books.js - Updated Functions
+
+const API_KEY = 'your_api_key_here'; // Replace with your actual API key
 const RESULTS_PER_PAGE = 10;
 
 // Home/Book Search Page
@@ -57,47 +59,10 @@ function fetchPage(page, searchTerm) {
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Book Details Page
-function loadBookDetails() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const bookId = urlParams.get('id');
-    if (bookId) {
-        fetchBookDetails(bookId);
-    }
-}
-
-function fetchBookDetails(bookId) {
-    const url = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => displayBookDetails(data))
-        .catch(error => console.error('Error fetching data:', error));
-}
-
-function displayBookDetails(data) {
-    const bookDetailsContainer = document.getElementById('bookDetails');
-    bookDetailsContainer.innerHTML = '';
-
-    const volumeInfo = data.volumeInfo;
-    const bookHtml = `
-        <div class="book">
-            <h2>${volumeInfo.title}</h2>
-            <h3>${volumeInfo.subtitle ? volumeInfo.subtitle : ''}</h3>
-            <p><strong>Author:</strong> ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
-            <p><strong>Publisher:</strong> ${volumeInfo.publisher}</p>
-            <p><strong>Published Date:</strong> ${volumeInfo.publishedDate}</p>
-            <p><strong>Description:</strong> ${volumeInfo.description}</p>
-            <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
-        </div>
-    `;
-    bookDetailsContainer.innerHTML = bookHtml;
-}
-
 // My Bookshelf Page
 function loadBookshelf() {
-    const bookshelfId = '1001';
-    const url = `https://www.googleapis.com/books/v1/users/117729639710872190748/bookshelves/${bookshelfId}/volumes?key=${API_KEY}`;
+    const bookshelfId = 'your_bookshelf_id_here'; // Replace with your actual bookshelf ID
+    const url = `https://www.googleapis.com/books/v1/users/YOUR_USER_ID/bookshelves/${bookshelfId}/volumes?key=${API_KEY}`;
 
     fetch(url)
         .then(response => response.json())
@@ -128,8 +93,6 @@ function displayBookshelf(data) {
 document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.includes('index.html')) {
         document.getElementById('search-button').onclick = searchBooks;
-    } else if (window.location.pathname.includes('book-details.html')) {
-        loadBookDetails();
     } else if (window.location.pathname.includes('bookshelf.html')) {
         loadBookshelf();
     }
