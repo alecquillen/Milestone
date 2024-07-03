@@ -72,6 +72,14 @@ function addToBookshelf(bookId) {
     }
 }
 
+// Function to remove book from local storage bookshelf
+function removeFromBookshelf(bookId) {
+    let bookshelf = JSON.parse(localStorage.getItem('bookshelf')) || [];
+    bookshelf = bookshelf.filter(id => id !== bookId);
+    localStorage.setItem('bookshelf', JSON.stringify(bookshelf));
+    loadBookshelf(); // Refresh bookshelf after removal
+}
+
 // My Bookshelf Page
 function loadBookshelf() {
     let bookshelf = JSON.parse(localStorage.getItem('bookshelf')) || [];
@@ -101,6 +109,7 @@ function displayBookshelfBook(data) {
             <h4><a href="book-details.html?id=${data.id}" class="book-link">${volumeInfo.title}</a></h4>
             <p>By: ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
             <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
+            <button onclick="removeFromBookshelf('${data.id}')">Remove from Bookshelf</button>
         </div>
     `;
     bookshelfContainer.innerHTML += bookHtml;
