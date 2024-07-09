@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -16,10 +17,9 @@
     </div>
     <main>
         <h2>Book Search</h2>
-        <div id="searchContainer">
-            <input type="text" id="searchInput" placeholder="Enter book title">
-            <button id="searchButton" onclick="searchBooks()">Search</button>
-        </div>
+        <input type="text" id="searchInput" placeholder="Enter book title">
+        <button id="searchButton" onclick="searchBooks()">Search</button>
+
         <div id="searchResults"></div>
         <div id="pagination"></div>
     </main>
