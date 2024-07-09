@@ -9,6 +9,31 @@ body {
     color: #e0e0e0;
 }
 
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #4da6ff;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
 h1, h2, h3, h4 {
     color: #ffffff;
     text-align: center;
@@ -73,21 +98,25 @@ button:hover {
     border-bottom: none;
 }
 
-/* Center the title and position the links */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    flex: 1;
+/* Pagination styling */
+#pagination {
     text-align: center;
-    margin: 0;
+    margin-top: 20px;
 }
 
-.header .nav-links {
-    display: flex;
-    gap: 20px;
+#pagination button {
+    font-size: 1.2em; /* Enlarge the page numbers */
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: 1px solid #4da6ff; /* Add a border to the page numbers */
+    background-color: transparent;
+    color: #4da6ff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
+
+#pagination button:hover {
+    background-color: #4da6ff;
+    color: #ffffff;
+}
+
