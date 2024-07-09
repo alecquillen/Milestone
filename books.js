@@ -93,6 +93,8 @@ function displayBookshelf(books) {
             `;
             bookshelfContainer.innerHTML += bookHtml;
         });
+    } else {
+        bookshelfContainer.innerHTML = '<p>Bookshelf is empty...</p>';
     }
 }
 
@@ -171,3 +173,4 @@ function fetchBookDetails(bookId) {
         }
     });
 }
+
