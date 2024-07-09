@@ -2,19 +2,18 @@
 
 const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I'; 
 const RESULTS_PER_PAGE = 10;
-const MAX_RESULTS = 50; // Display only the first 50 results
 
 // Home/Book Search Page
 function searchBooks() {
     const searchTerm = document.getElementById('searchInput').value;
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${MAX_RESULTS}`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
 
     $.ajax({
         url: url,
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            displaySearchResults(data, 1); // Display the first page of results initially
+            displaySearchResults(data);
             setupPagination(data.totalItems, searchTerm);
         },
         error: function(error) {
@@ -23,15 +22,12 @@ function searchBooks() {
     });
 }
 
-function displaySearchResults(data, page) {
+function displaySearchResults(data) {
     const searchResultsContainer = document.getElementById('searchResults');
     searchResultsContainer.innerHTML = '';
 
     if (data.items) {
-        const startIndex = (page - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, data.items.length);
-        for (let i = startIndex; i < endIndex; i++) {
-            const book = data.items[i];
+        data.items.forEach(book => {
             const volumeInfo = book.volumeInfo;
             const bookHtml = `
                 <div class="book">
@@ -42,14 +38,14 @@ function displaySearchResults(data, page) {
                 </div>
             `;
             searchResultsContainer.innerHTML += bookHtml;
-        }
+        });
     }
 }
 
 function setupPagination(totalItems, searchTerm) {
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
-    const totalPages = Math.min(Math.ceil(totalItems / RESULTS_PER_PAGE), 5); // Ensure a maximum of 5 pages
+    const totalPages = Math.ceil(totalItems / RESULTS_PER_PAGE);
 
     for (let i = 1; i <= totalPages; i++) {
         const button = document.createElement('button');
@@ -68,7 +64,7 @@ function fetchPage(page, searchTerm) {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            displaySearchResults(data, page);
+            displaySearchResults(data);
         },
         error: function(error) {
             console.error('Error fetching data:', error);
@@ -192,3 +188,4 @@ document.addEventListener('DOMContentLoaded', function() {
         loadBookDetails();
     }
 });
+
