@@ -6,20 +6,15 @@ const RESULTS_PER_PAGE = 10;
 // Home/Book Search Page
 function searchBooks() {
     const searchTerm = document.getElementById('searchInput').value;
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
+    const url = https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE};
 
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
             displaySearchResults(data);
             setupPagination(data.totalItems, searchTerm);
-        },
-        error: function(error) {
-            console.error('Error fetching data:', error);
-        }
-    });
+        })
+        .catch(error => console.error('Error fetching data:', error));
 }
 
 function displaySearchResults(data) {
@@ -29,14 +24,14 @@ function displaySearchResults(data) {
     if (data.items) {
         data.items.forEach(book => {
             const volumeInfo = book.volumeInfo;
-            const bookHtml = `
+            const bookHtml = 
                 <div class="book">
                     <h4><a href="book-details.html?id=${book.id}" class="book-link">${volumeInfo.title}</a></h4>
                     <p>By: ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
                     <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
                     <button onclick="addToBookshelf('${book.id}')">Add to Bookshelf</button>
                 </div>
-            `;
+            ;
             searchResultsContainer.innerHTML += bookHtml;
         });
     }
@@ -57,19 +52,12 @@ function setupPagination(totalItems, searchTerm) {
 
 function fetchPage(page, searchTerm) {
     const startIndex = (page - 1) * RESULTS_PER_PAGE;
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
+    const url = https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE};
 
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            displaySearchResults(data);
-        },
-        error: function(error) {
-            console.error('Error fetching data:', error);
-        }
-    });
+    fetch(url)
+        .then(response => response.json())
+        .then(data => displaySearchResults(data))
+        .catch(error => console.error('Error fetching data:', error));
 }
 
 // Function to add book to local storage bookshelf
@@ -104,33 +92,26 @@ function loadBookshelf() {
     }
 
     bookshelf.forEach(bookId => {
-        const url = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY}`;
+        const url = https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY};
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                displayBookshelfBook(data);
-            },
-            error: function(error) {
-                console.error('Error fetching data:', error);
-            }
-        });
+        fetch(url)
+            .then(response => response.json())
+            .then(data => displayBookshelfBook(data))
+            .catch(error => console.error('Error fetching data:', error));
     });
 }
 
 function displayBookshelfBook(data) {
     const bookshelfContainer = document.getElementById('bookshelf-container');
     const volumeInfo = data.volumeInfo;
-    const bookHtml = `
+    const bookHtml = 
         <div class="book">
             <h4><a href="book-details.html?id=${data.id}" class="book-link">${volumeInfo.title}</a></h4>
             <p>By: ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
             <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
             <button onclick="removeFromBookshelf('${data.id}')">Remove from Bookshelf</button>
         </div>
-    `;
+    ;
     bookshelfContainer.innerHTML += bookHtml;
 }
 
@@ -144,19 +125,12 @@ function loadBookDetails() {
 }
 
 function fetchBookDetails(bookId) {
-    const url = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY}`;
+    const url = https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY};
 
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            displayBookDetails(data);
-        },
-        error: function(error) {
-            console.error('Error fetching data:', error);
-        }
-    });
+    fetch(url)
+        .then(response => response.json())
+        .then(data => displayBookDetails(data))
+        .catch(error => console.error('Error fetching data:', error));
 }
 
 function displayBookDetails(data) {
@@ -164,7 +138,7 @@ function displayBookDetails(data) {
     bookDetailsContainer.innerHTML = '';
 
     const volumeInfo = data.volumeInfo;
-    const bookHtml = `
+    const bookHtml = 
         <div class="book">
             <h2>${volumeInfo.title}</h2>
             <h3>${volumeInfo.subtitle ? volumeInfo.subtitle : ''}</h3>
@@ -174,7 +148,7 @@ function displayBookDetails(data) {
             <p><strong>Description:</strong> ${volumeInfo.description}</p>
             <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
         </div>
-    `;
+    ;
     bookDetailsContainer.innerHTML = bookHtml;
 }
 
@@ -188,4 +162,3 @@ document.addEventListener('DOMContentLoaded', function() {
         loadBookDetails();
     }
 });
-
