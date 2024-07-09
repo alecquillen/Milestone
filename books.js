@@ -8,13 +8,18 @@ function searchBooks() {
     const searchTerm = document.getElementById('searchInput').value;
     const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
             displaySearchResults(data);
             setupPagination(data.totalItems, searchTerm);
-        })
-        .catch(error => console.error('Error fetching data:', error));
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
 }
 
 function displaySearchResults(data) {
@@ -54,10 +59,17 @@ function fetchPage(page, searchTerm) {
     const startIndex = (page - 1) * RESULTS_PER_PAGE;
     const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => displaySearchResults(data))
-        .catch(error => console.error('Error fetching data:', error));
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            displaySearchResults(data);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
 }
 
 // Function to add book to local storage bookshelf
@@ -94,10 +106,17 @@ function loadBookshelf() {
     bookshelf.forEach(bookId => {
         const url = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY}`;
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => displayBookshelfBook(data))
-            .catch(error => console.error('Error fetching data:', error));
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                displayBookshelfBook(data);
+            },
+            error: function(error) {
+                console.error('Error fetching data:', error);
+            }
+        });
     });
 }
 
@@ -127,10 +146,17 @@ function loadBookDetails() {
 function fetchBookDetails(bookId) {
     const url = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${API_KEY}`;
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => displayBookDetails(data))
-        .catch(error => console.error('Error fetching data:', error));
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            displayBookDetails(data);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
 }
 
 function displayBookDetails(data) {
@@ -162,3 +188,4 @@ document.addEventListener('DOMContentLoaded', function() {
         loadBookDetails();
     }
 });
+
