@@ -1,6 +1,7 @@
 const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I';
 const RESULTS_PER_PAGE = 10;
 const MAX_PAGES = 5; // Limit the pagination to 5 pages
+let currentView = 'grid'; // Default view
 
 // Home/Book Search Page
 function searchBooks() {
@@ -19,7 +20,7 @@ function searchBooks() {
             console.error('Error fetching data:', error);
         }
     });
-}
+
 
 function displaySearchResults(data) {
     const searchResultsContainer = document.getElementById('searchResults');
@@ -39,6 +40,9 @@ function displaySearchResults(data) {
             searchResultsContainer.innerHTML += bookHtml;
         });
     }
+
+    // Apply the current view layout
+    applyViewLayout();
 }
 
 function setupPagination(totalItems, searchTerm) {
@@ -69,6 +73,28 @@ function fetchPage(page, searchTerm) {
             console.error('Error fetching data:', error);
         }
     });
+}
+
+// View layout functions
+function setGridView() {
+    currentView = 'grid';
+    applyViewLayout();
+}
+
+function setListView() {
+    currentView = 'list';
+    applyViewLayout();
+}
+
+function applyViewLayout() {
+    const searchResultsContainer = document.getElementById('searchResults');
+    if (currentView === 'grid') {
+        searchResultsContainer.classList.add('grid-view');
+        searchResultsContainer.classList.remove('list-view');
+    } else {
+        searchResultsContainer.classList.add('list-view');
+        searchResultsContainer.classList.remove('grid-view');
+    }
 }
 
 // My Bookshelf Page
@@ -172,5 +198,5 @@ function fetchBookDetails(bookId) {
             console.error('Error fetching book details:', error);
         }
     });
+  }
 }
-
