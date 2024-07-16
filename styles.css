@@ -1,3 +1,5 @@
+/* styles.css */
+
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -26,15 +28,25 @@ nav ul li {
 nav ul li a {
     color: #4da6ff;
     text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #4da6ff;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 nav ul li a:hover {
-    text-decoration: underline;
+    background-color: #4da6ff;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 h1, h2, h3, h4 {
     color: #ffffff;
     text-align: center;
+}
+
+h1 {
+    font-family: 'Courier New', Courier, monospace; /* Apply cursive font to the main title */
 }
 
 a {
