@@ -30,7 +30,7 @@ function displaySearchResults(data) {
         data.items.forEach(book => {
             const volumeInfo = book.volumeInfo;
             const bookHtml = `
-                <div class="book">
+                <div class="book ${currentView === 'list' ? 'centered' : ''}">
                     <h4><a href="book-details.html?id=${book.id}" class="book-link">${volumeInfo.title}</a></h4>
                     <p>By: ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
                     <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
@@ -41,7 +41,6 @@ function displaySearchResults(data) {
         });
     }
 
-    // Apply the current view layout
     applyViewLayout();
 }
 
