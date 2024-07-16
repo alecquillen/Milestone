@@ -20,7 +20,7 @@ function searchBooks() {
             console.error('Error fetching data:', error);
         }
     });
-
+}
 
 function displaySearchResults(data) {
     const searchResultsContainer = document.getElementById('searchResults');
@@ -198,5 +198,4 @@ function fetchBookDetails(bookId) {
             console.error('Error fetching book details:', error);
         }
     });
-  }
 }
