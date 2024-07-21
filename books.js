@@ -1,22 +1,27 @@
 const API_KEY = 'AIzaSyBMtgM5pmAm79-KkyDbpVo_Jq-dKCTKN0I';
 const RESULTS_PER_PAGE = 10;
-const MAX_PAGES = 5;
-
+const MAX_PAGES = 5; // Limit the pagination to 5 pages
 let currentView = 'grid'; // Default view
 
 // Home/Book Search Page
 function searchBooks() {
-    const searchTerm = document.getElementById('searchInput').value;
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
+    const searchTerm = document.getElementById('searchInput').value.trim();
+    if (searchTerm === '') {
+        alert('Please enter a search term');
+        return;
+    }
+    
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
 
     $.ajax({
         url: url,
         method: 'GET',
-        success: function (data) {
+        dataType: 'json',
+        success: function(data) {
             displaySearchResults(data);
             setupPagination(data.totalItems, searchTerm);
         },
-        error: function (error) {
+        error: function(error) {
             console.error('Error fetching data:', error);
         }
     });
@@ -30,7 +35,7 @@ function displaySearchResults(data) {
         data.items.forEach(book => {
             const volumeInfo = book.volumeInfo;
             const bookHtml = `
-                <div class="book ${currentView === 'grid' ? 'grid-item' : 'list-item'}">
+                <div class="book ${currentView === 'list' ? 'centered' : ''}">
                     <h4><a href="book-details.html?id=${book.id}" class="book-link">${volumeInfo.title}</a></h4>
                     <p>By: ${volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author'}</p>
                     <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
@@ -39,13 +44,17 @@ function displaySearchResults(data) {
             `;
             searchResultsContainer.innerHTML += bookHtml;
         });
+    } else {
+        searchResultsContainer.innerHTML = '<p>No results found.</p>';
     }
+
+    applyViewLayout();
 }
 
 function setupPagination(totalItems, searchTerm) {
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
-    const totalPages = Math.min(Math.ceil(totalItems / RESULTS_PER_PAGE), MAX_PAGES);
+    const totalPages = Math.min(Math.ceil(totalItems / RESULTS_PER_PAGE), MAX_PAGES); // Limit to 5 pages
 
     for (let i = 1; i <= totalPages; i++) {
         const button = document.createElement('button');
@@ -57,29 +66,41 @@ function setupPagination(totalItems, searchTerm) {
 
 function fetchPage(page, searchTerm) {
     const startIndex = (page - 1) * RESULTS_PER_PAGE;
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
 
     $.ajax({
         url: url,
         method: 'GET',
-        success: function (data) {
+        dataType: 'json',
+        success: function(data) {
             displaySearchResults(data);
         },
-        error: function (error) {
+        error: function(error) {
             console.error('Error fetching data:', error);
         }
     });
 }
 
-// Toggle view functions
+// View layout functions
 function setGridView() {
     currentView = 'grid';
-    document.getElementById('searchResults').className = 'grid-view';
+    applyViewLayout();
 }
 
 function setListView() {
     currentView = 'list';
-    document.getElementById('searchResults').className = 'list-view';
+    applyViewLayout();
+}
+
+function applyViewLayout() {
+    const searchResultsContainer = document.getElementById('searchResults');
+    if (currentView === 'grid') {
+        searchResultsContainer.classList.add('grid-view');
+        searchResultsContainer.classList.remove('list-view');
+    } else {
+        searchResultsContainer.classList.add('list-view');
+        searchResultsContainer.classList.remove('grid-view');
+    }
 }
 
 // My Bookshelf Page
@@ -95,7 +116,7 @@ function displayBookshelf(books) {
     if (books.length > 0) {
         books.forEach(book => {
             const bookHtml = `
-                <div class="book ${currentView === 'grid' ? 'grid-item' : 'list-item'}">
+                <div class="book">
                     <h4><a href="book-details.html?id=${book.id}" class="book-link">${book.title}</a></h4>
                     <p>By: ${book.authors ? book.authors.join(', ') : 'Unknown Author'}</p>
                     <img src="${book.thumbnail}" alt="Book Cover">
@@ -115,7 +136,8 @@ function addToBookshelf(bookId) {
     $.ajax({
         url: url,
         method: 'GET',
-        success: function (data) {
+        dataType: 'json',
+        success: function(data) {
             const volumeInfo = data.volumeInfo;
             const book = {
                 id: bookId,
@@ -133,7 +155,7 @@ function addToBookshelf(bookId) {
                 alert('Book is already in the bookshelf');
             }
         },
-        error: function (error) {
+        error: function(error) {
             console.error('Error adding book to bookshelf:', error);
         }
     });
@@ -147,9 +169,14 @@ function removeFromBookshelf(bookId) {
 }
 
 // Load functions based on the current page
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.includes('index.html')) {
-        $('#searchButton').click(searchBooks);
+        const searchButton = document.getElementById('searchButton');
+        if (searchButton) {
+            searchButton.onclick = searchBooks;
+        } else {
+            console.error('Search button not found.');
+        }
     } else if (window.location.pathname.includes('bookshelf.html')) {
         loadBookshelf();
     } else if (window.location.pathname.includes('book-details.html')) {
@@ -167,7 +194,8 @@ function fetchBookDetails(bookId) {
     $.ajax({
         url: url,
         method: 'GET',
-        success: function (data) {
+        dataType: 'json',
+        success: function(data) {
             const volumeInfo = data.volumeInfo;
             const bookDetailsHtml = `
                 <h3>${volumeInfo.title}</h3>
@@ -175,9 +203,9 @@ function fetchBookDetails(bookId) {
                 <img src="${volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : ''}" alt="Book Cover">
                 <p>${volumeInfo.description}</p>
             `;
-            $('#bookDetails').html(bookDetailsHtml);
+            document.getElementById('bookDetails').innerHTML = bookDetailsHtml;
         },
-        error: function (error) {
+        error: function(error) {
             console.error('Error fetching book details:', error);
         }
     });
