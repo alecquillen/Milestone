@@ -5,13 +5,8 @@ let currentView = 'grid'; // Default view
 
 // Home/Book Search Page
 function searchBooks() {
-    const searchTerm = document.getElementById('searchInput').value.trim();
-    if (searchTerm === '') {
-        alert('Please enter a search term');
-        return;
-    }
-    
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
+    const searchTerm = document.getElementById('searchInput').value;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&maxResults=${RESULTS_PER_PAGE}`;
 
     $.ajax({
         url: url,
@@ -44,8 +39,6 @@ function displaySearchResults(data) {
             `;
             searchResultsContainer.innerHTML += bookHtml;
         });
-    } else {
-        searchResultsContainer.innerHTML = '<p>No results found.</p>';
     }
 
     applyViewLayout();
@@ -66,7 +59,7 @@ function setupPagination(totalItems, searchTerm) {
 
 function fetchPage(page, searchTerm) {
     const startIndex = (page - 1) * RESULTS_PER_PAGE;
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${API_KEY}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
 
     $.ajax({
         url: url,
@@ -171,12 +164,7 @@ function removeFromBookshelf(bookId) {
 // Load functions based on the current page
 document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.includes('index.html')) {
-        const searchButton = document.getElementById('searchButton');
-        if (searchButton) {
-            searchButton.onclick = searchBooks;
-        } else {
-            console.error('Search button not found.');
-        }
+        document.getElementById('searchButton').onclick = searchBooks;
     } else if (window.location.pathname.includes('bookshelf.html')) {
         loadBookshelf();
     } else if (window.location.pathname.includes('book-details.html')) {
